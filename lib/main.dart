@@ -1,3 +1,4 @@
+import 'package:admob_tutorial_app/pages/home_page.dart';
 import 'package:admob_tutorial_app/service/ad_service.dart';
 import 'package:flutter/material.dart';
 
@@ -14,11 +15,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+      home: HomePage(),
     );
   }
 }
