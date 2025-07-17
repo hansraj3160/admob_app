@@ -13,17 +13,20 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _interstitialAdManager = InterstitialAdManager();
   // Initialize in your state
-final _rewardedAdManager = RewardedAdManager();
+  final _rewardedAdManager = RewardedAdManager();
+  var _reward=0;
+  var _rewardType="";
   @override
   void initState() {
     super.initState();
     _interstitialAdManager.loadAd();
-    _rewardedAdManager.dispose();
+
     _rewardedAdManager.loadAd();
   }
 
   @override
   void dispose() {
+    _rewardedAdManager.dispose();
     _interstitialAdManager.dispose();
     super.dispose();
   }
@@ -37,35 +40,42 @@ final _rewardedAdManager = RewardedAdManager();
           Center(child: Text('Welcome to the Home Page!')),
           Column(
             children: [
-              
-// Show ad when needed
-ElevatedButton(
-  onPressed: () {
-    _rewardedAdManager.showAd(
-      onRewardEarned: (reward) {
-        // Handle reward
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('You earned ${reward.amount} ${reward.type}')),
-        );
-      },
-      onAdFailedToShow: (error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Ad failed to show: $error')),
-        );
-      },
-    );
-  },
-  child: const Text('Show Rewarded Ad'),
-),
+              // Show ad when needed
+              ElevatedButton(
+                onPressed: () {
+                  _rewardedAdManager.showAd(
+                    onRewardEarned: (reward) {
+                      _reward = reward.amount.toInt();
+                      _rewardType=reward.type;
+                      // Handle reward
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'You earned ${reward.amount} ${reward.type}',
+                          ),
+                        ),
+                      );
+                    },
+                    onAdFailedToShow: (error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Ad failed to show: $error')),
+                      );
+                    },
+                  );
+                },
+                child: const Text('Show Rewarded Ad'),
+              ),
+              Text(
+                          ),
               SizedBox(height: 20),
               // Your content
               ElevatedButton(
-  onPressed: () {
-    _interstitialAdManager.showAd();
-    // Your button action
-  },
-  child: const Text('Show Interstitial Ad'),
-),
+                onPressed: () {
+                  _interstitialAdManager.showAd();
+                  // Your button action
+                },
+                child: const Text('Show Interstitial Ad'),
+              ),
               const SizedBox(height: 20),
               const BannerAdWidget(),
             ],
